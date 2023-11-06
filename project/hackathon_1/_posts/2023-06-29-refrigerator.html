@@ -1,0 +1,107 @@
+---
+layout: post
+title: "냉장고를 부탁해."
+subtitle: "냉장고 한 켠에 잊혀진 재료들을 모아서 요리하기."
+date: 2023-06-29 13:45:13 -0400
+background: '/img/posts/rf.jpg'
+categories: ['refrigerator', 'gpt','cook']
+---
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DietGPT</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        /* page-loading */
+        #loading {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            position: fixed;
+            display: block;
+            opacity: 0.6;
+            background: #e4e4e4;
+            z-index: 99;
+            text-align: center;
+        }
+
+            #loading > img {
+                position: absolute;
+                top: 40%;
+                left: 45%;
+                z-index: 100;
+            }
+
+            #loading > p {
+                position: absolute;
+                top: 57%;
+                left: 43%;
+                z-index: 101;
+            }
+    </style>
+</head>
+
+<body>
+    <h1>냉장고 남은 식재료 요리</h1>
+    <div>재료를 입력하세요. </div>
+
+    <input type="text" id="keywords" name="keywords" required />
+    <button onclick="chatGPT()">입력</button>
+    <div id="result"></div>
+
+    <div id="loading">
+        <img src="https://i.ibb.co/6sV9vtD/Kakao-Talk-20230630-043505052.gif">
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#loading').hide();
+        });
+
+        function chatGPT() {
+            const api_key = prompt("API 키를 입력하세요");
+            if (api_key === null || !api_key.startsWith("sk-")) {
+                return;
+            }
+            const keywords = document.getElementById('keywords').value;
+            $('#loading').show();
+
+            // Clear previous search results
+            let result = document.getElementById('result');
+            result.innerHTML = '';
+
+            const messages = [
+                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'user', content: keywords + '(으)로 만들 수 있는 음식과 조리법 알려줘.' },
+            ];
+
+            const data = {
+                model: 'gpt-3.5-turbo',
+                temperature: 0.5,
+                n: 1,
+                messages: messages,
+            };
+
+            $.ajax({
+                url: "https://api.openai.com/v1/chat/completions",
+                method: 'POST',
+                headers: {
+                    Authorization: "Bearer " + api_key,
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify(data),
+            }).then(function (response) {
+                $('#loading').hide();
+                console.log(response);
+                let pre = document.createElement('pre');
+                pre.innerHTML = "\n\n" + response.choices[0].message.content;
+                result.appendChild(pre);
+                document.getElementById('keywords').value = '';
+            });
+        }
+    </script>
+</body>
+
+</html>
