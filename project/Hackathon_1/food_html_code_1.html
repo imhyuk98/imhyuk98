@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BMI와 식단 제안</title>
+  <script>
+    function calculateBMI() {
+      // 폼 입력값 가져오기
+      var weight = parseFloat(document.getElementById("weight").value);
+      var height = parseFloat(document.getElementById("height").value) / 100;
+      var age = parseInt(document.getElementById("age").value);
+      var gender = document.getElementById("gender").value;
+
+      // BMI 계산
+      var bmi = weight / (height * height);
+
+      // 결과 표시
+      document.getElementById("bmiResult").innerHTML = "당신의 BMI는 " + bmi.toFixed(1) + "입니다.";
+    }
+
+    function suggestDiet() {
+      // 폼 입력값 가져오기
+      var weight = parseFloat(document.getElementById("weight").value);
+      var height = parseFloat(document.getElementById("height").value) / 100;
+      var age = parseInt(document.getElementById("age").value);
+      var gender = document.getElementById("gender").value;
+
+      // 기초대사량 계산
+      var bmr;
+      if (gender === "남성") {
+        bmr = 66 + (13.75 * weight) + (5 * (height * 100)) - (6.75 * age);
+      } else {
+        bmr = 655 + (9.56 * weight) + (1.85 * (height * 100)) - (4.68 * age);
+      }
+
+      // 추천 식단 계산
+      var bmi = weight / (height * height);
+      var diet;
+      if (bmi < 18.5) {
+        diet = "저체중";
+      } else if (bmi < 24.9) {
+        diet = "정상 체중";
+      } else if (bmi < 29.9) {
+        diet = "과체중";
+      } else {
+        diet = "비만";
+      }
+
+      // 결과 표시
+      document.getElementById("bmrResult").innerHTML = "당신의 기초대사량은 " + bmr.toFixed(1) + "입니다.";
+      document.getElementById("dietResult").innerHTML = "당신은 " + diet + " 구간입니다.";
+    }
+  </script>
+</head>
+<body>
+  <h1>BMI와 식단 제안</h1>
+  <form>
+    <label for="weight">몸무게(kg):</label>
+    <input type="number" id="weight" name="weight" required><br>
+
+    <label for="height">키(cm):</label>
+    <input type="number" id="height" name="height" required><br>
+
+    <label for="age">나이:</label>
+    <input type="number" id="age" name="age" required><br>
+
+    <label for="gender">성별:</label>
+    <select id="gender" name="gender" required>
+      <option value="남성">남성</option>
+      <option value="여성">여성</option>
+    </select><br>
+
+    <button type="button" onclick="calculateBMI()">BMI 계산</button>
+    <button type="button" onclick="suggestDiet()">식단 제안</button>
+  </form>
+
+  <div id="bmiResult"></div>
+  <div id="bmrResult"></div>
+  <div id="dietResult"></div>
+</body>
+</html>

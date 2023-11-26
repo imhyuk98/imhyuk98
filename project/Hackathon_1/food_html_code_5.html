@@ -1,0 +1,282 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>BMI and Diet Calculator</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            form {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+            input[type="submit"] {
+                background-color: #4CAF50;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            h2 {
+                margin-top: 30px;
+            }
+
+            p {
+                margin-bottom: 10px;
+            }
+
+            ul {
+                margin-top: 10px;
+                padding-left: 20px;
+            }
+
+            .hidden {
+                display: none;
+            }
+            #genderRadioGroup {
+            display: flex;
+            flex-direction: row;
+            }
+
+            #genderRadioGroup input[type="radio"],
+            #genderRadioGroup label {
+            margin-right: 10px;
+            }
+            .calculate-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            }
+
+            .calculate-button:hover {
+                background-color: #45a049;
+            }
+            .result-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .result {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .menu-item {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+        </style>
+        <script>
+            function calculateBMI() {
+                var genderRadios = document.getElementsByName("gender");
+                var selectedGender;
+                for (var i = 0; i < genderRadios.length; i++) {
+                    if (genderRadios[i].checked) {
+                        selectedGender = genderRadios[i].value;
+                        break;
+                    }
+                }
+
+                if (!selectedGender) {
+                    alert("성별을 선택해주세요.");
+                    return;
+                }
+
+                var height = parseFloat(document.getElementById("height").value) / 100;
+                var weight = parseFloat(document.getElementById("weight").value);
+                var age = parseInt(document.getElementById("age").value);
+
+                if (isNaN(height)) {
+                    alert("키를 입력해주세요.");
+                    return;
+                }
+
+                if (isNaN(weight)) {
+                    alert("몸무게를 입력해주세요.");
+                    return;
+                }
+
+                if (isNaN(age)) {
+                    alert("나이를 입력해주세요.");
+                    return;
+                }
+
+                document.getElementById("bmiResult").classList.remove("hidden");
+                document.getElementById("bmrResult").classList.remove("hidden");
+                document.getElementById("dietResult").classList.remove("hidden");
+                document.getElementById("dietDescription").classList.remove("hidden");
+                document.getElementById("breakfastMenu").classList.remove("hidden");
+                document.getElementById("breakfastAmount").classList.remove("hidden");
+                document.getElementById("lunchMenu").classList.remove("hidden");
+                document.getElementById("lunchAmount").classList.remove("hidden");
+                document.getElementById("dinnerMenu").classList.remove("hidden");
+                document.getElementById("dinnerAmount").classList.remove("hidden");
+                document.getElementById("riceAmount").classList.remove("hidden");
+
+                // Calculate BMI
+                var bmi = weight / (height * height);
+                document.getElementById("bmiResult").textContent = "당신의 BMI는 " + bmi.toFixed(1) + "입니다.";
+
+                // Calculate BMR
+                var bmr;
+                if (selectedGender === "남성") {
+                    bmr = 66 + (13.75 * weight) + (5 * (height * 100)) - (6.75 * age);
+                } else {
+                    bmr = 655 + (9.56 * weight) + (1.85 * (height * 100)) - (4.68 * age);
+                }
+                document.getElementById("bmrResult").textContent = "당신의 기초대사량은 " + bmr.toFixed(1) + "입니다.";
+
+                // Suggest diet
+                var riceAmount;
+                if (bmi < 18.5) {
+                    riceAmount = bmr * 0.3;
+                } else if (bmi < 24.9) {
+                    riceAmount = bmr * 0.4;
+                } else if (bmi < 29.9) {
+                    riceAmount = bmr * 0.5;
+                } else {
+                    riceAmount = bmr * 0.6;
+                }
+
+                var dietSuggestion = {
+                    "구간": "",
+                    "식단": {
+                        "아침": {
+                            "메뉴": "볶음 계란",
+                            "음식 양": "계란 2개, 채소"
+                        },
+                        "점심": {
+                            "메뉴": "닭가슴살 샐러드",
+                            "음식 양": "닭가슴살 100g, 생채소"
+                        },
+                        "저녁": {
+                            "메뉴": "그릴 스테이크",
+                            "음식 양": "쇠고기 스테이크 150g, 채소"
+                        }
+                    },
+                    "밥의 그램 수": riceAmount
+                };
+
+                if (bmi < 18.5) {
+                    dietSuggestion["구간"] = "저체중";
+                } else if (bmi < 24.9) {
+                    dietSuggestion["구간"] = "정상 체중";
+                } else if (bmi < 29.9) {
+                    dietSuggestion["구간"] = "과체중";
+                } else  {
+                    dietSuggestion["구간"] = "비만";
+                }
+
+                document.getElementById("dietResult").textContent = "당신은 " + dietSuggestion["구간"] + " 구간입니다.";
+                document.getElementById("dietDescription").textContent = "다음은 " + dietSuggestion["구간"] + " 구간에 추천되는 식단입니다:";
+                document.getElementById("breakfastMenu").textContent = "아침: " + dietSuggestion["식단"]["아침"]["메뉴"];
+                document.getElementById("breakfastAmount").textContent = "  음식 양: " + dietSuggestion["식단"]["아침"]["음식 양"];
+                document.getElementById("lunchMenu").textContent = "점심: " + dietSuggestion["식단"]["점심"]["메뉴"];
+                document.getElementById("lunchAmount").textContent = "  음식 양: " + dietSuggestion["식단"]["점심"]["음식 양"];
+                document.getElementById("dinnerMenu").textContent = "저녁: " + dietSuggestion["식단"]["저녁"]["메뉴"];
+                document.getElementById("dinnerAmount").textContent = "  음식 양: " + dietSuggestion["식단"]["저녁"]["음식 양"];
+                document.getElementById("riceAmount").textContent = "밥의 그램 수: " + dietSuggestion["밥의 그램 수"].toFixed(1) + "g";
+                var resultContainer = document.getElementById("resultContainer");
+                var resultBox = document.querySelector(".result-box");
+                resultContainer.classList.remove("hidden");
+                resultBox.classList.remove("hidden");
+            }
+            function resetForm() {
+                var resultContainer = document.getElementById("resultContainer");
+                var inputElements = document.querySelectorAll("input[type='number']");
+
+                resultContainer.classList.add("hidden");
+
+                for (var i = 0; i < inputElements.length; i++) {
+                    inputElements[i].value = "";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>BMI and Diet Calculator</h1>
+        <form>
+            <label for="gender">성별을 선택하세요:</label>
+            <br>
+            <div id="genderRadioGroup">
+            <input type="radio" id="male" name="gender" value="남성" checked>
+            <label for="male">남성</label>
+            <input type="radio" id="female" name="gender" value="여성">
+            <label for="female">여성</label>
+            </div>
+            <br><br>
+
+            <label for="height">키(cm)를 입력하세요:</label>
+            <input type="number" id="height" required><br><br>
+            <label for="weight">몸무게(kg)를 입력하세요:</label>
+            <input type="number" id="weight" required><br><br>
+            <label for="age">나이를 입력하세요:</label>
+            <input type="number" id="age" required><br><br>
+            <input type="button" value="계산" class="calculate-button" onclick="calculateBMI();">
+            <input type="button" value="초기화" class="calculate-button" onclick="resetForm();">
+        </form>
+
+        <div id="resultContainer">
+            <div class="result-box hidden">
+            <h2 class="hidden">결과</h2>
+            <p id="bmiResult" class="result hidden"></p>
+            <p id="bmrResult" class="result hidden"></p>
+            <p id="dietResult" class="result hidden"></p>
+            <p id="dietDescription" class="result hidden"></p>
+            <ul>
+                <li id="breakfastMenu" class="menu-item hidden"></li>
+                <li id="breakfastAmount" class="menu-item hidden"></li>
+                <li id="lunchMenu" class="menu-item hidden"></li>
+                <li id="lunchAmount" class="menu-item hidden"></li>
+                <li id="dinnerMenu" class="menu-item hidden"></li>
+                <li id="dinnerAmount" class="menu-item hidden"></li>
+            </ul>
+            <p id="riceAmount" class="result hidden"></p>
+            </div>
+        </div>
+        
+    </body>
+    </html>
