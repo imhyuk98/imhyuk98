@@ -1,0 +1,43 @@
+const int motorA1 = 4;    // 모터 A의 핀1
+const int motorA2 = 5;    // 모터 A의 핀2
+const int motorEN1 = 6;   // 모터 활성화 핀
+// 모터 드라이버 핀 설정
+const int motorA3 = 8;    // 모터 A의 핀1
+const int motorA4 = 9;    // 모터 A의 핀2
+const int motorEN2 = 10;   // 모터 활성화 핀
+
+void setup() {
+  // 핀을 출력으로 설정
+  pinMode(motorEN1, OUTPUT);
+  pinMode(motorA1, OUTPUT);
+  pinMode(motorA2, OUTPUT);
+  pinMode(motorEN2, OUTPUT);
+  pinMode(motorA3, OUTPUT);
+  pinMode(motorA4, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(motorA1, HIGH);
+  digitalWrite(motorA2, LOW);
+  digitalWrite(motorA3, HIGH);
+  digitalWrite(motorA4, LOW);
+  // 모터 활성화
+  analogWrite(motorEN1, 255);  // PWM 값은 0에서 255까지 설정 가능
+  analogWrite(motorEN2, 255);
+
+  // 대기
+  delay(20000);  // 2초 동안 대기
+  
+    // 모터를 정지
+    // 모터를 정지
+  digitalWrite(motorA1, LOW); 
+  digitalWrite(motorA2, LOW);
+  digitalWrite(motorA3, LOW);
+  digitalWrite(motorA4, LOW);
+  // 모터 비활성화
+  analogWrite(motorEN1, 0);
+  analogWrite(motorEN2, 0);
+  // 대기
+  delay(10800000);  // 2초 동안 대기
+}
