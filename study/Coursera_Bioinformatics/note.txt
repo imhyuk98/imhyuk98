@@ -1,0 +1,44 @@
+게놈 복제는 세포에서 수행되는 가장 중요한 작업
+딸세포
+
+ Watson과 Crick이 상상했던 것보다 훨씬 더 복잡한 것으로 나타났습니다. 앞으로 살펴보겠지만, DNA 복제를 보장하려면 엄청난 양의 분자 물류가 필요합니다.
+
+복제는  replication origin(ori)라는 게놈 영역에서 시작 DNA polymerases 라고 불리는 분자 복사 기계에서 수행
+
+유전자 치료의 개념은 치료 단백질을 암호화하는 인공 유전자가 포함된 바이러스 벡터를 중요한 유전자가 부족한 환자에게 의도적으로 감염시키는 것입니다.
+
+- DNA가 복사될 때 DNA에서 복사가 시작되는 지점을 ori(복제 원점의 약자)라고 합니다.
+
+- 이 복사는 DNA 중합효소라고 불리는 분자 기계에 의해 수행됩니다.
+
+- 오리가 어디에 있는지 아는 것은 두 가지 이유로 중요합니다. 하나는 분명히 오리가 DNA의 어느 위치에 있는지 알 수 있는 중요한 기준점 역할을 한다는 것입니다(예를 들어 내 집을 기준점으로 사용하는 경우 커피숍에 있을 때). 나는 집에서 너무 멀리 떨어져 있다고 말할 수 있습니다 - 기준점). 두 번째이자 매우 중요한 것은 사람의 유전자가 편집될 때(결함이 없는 인공 유전자로 결함이 있는 유전자를 교환하는 유전자 치료) 오리진을 편집하거나 변경하지 않도록 해야 한다는 것입니다. 그리고 첫 번째 요점으로 돌아가서, 편집해야 할 결함이 있는 유전자를 찾는 방법은 ori를 기준으로 해당 유전자를 찾는 것입니다.
+
+코딩이 잘못되면 오류로 표시됩니다. 마찬가지로 유전자 코딩이 잘못되면 질병으로 변합니다(생물학적 오류).
+
+
+첫째, 이러한 방법은 실험적 접근 방식보다 훨씬 빠릅니다. 둘째, 많은 실험의 결과는 컴퓨터 분석 없이는 해석될 수 없습니다. 특히, ori  예측에 대한 기존의 실험적 접근 방식은 다소 시간이 많이 걸립니다.
+ori가 일련의 문자에서 컴퓨터에 의해 선택될 수 있도록 잘 정의된 특성 집합을 가진 것이라면 왜 실험적으로 그것을 찾는 데 시간을 낭비합니까? 컴퓨터는 1초 안에 ori를 출력할 것입니다. 
+
+ori  영역에는 셀이 여기에서 복제를 시작하도록 명령하는 "숨겨진 메시지"가 있어야 합니다 . -> DNA box
+
+숨겨진 메시지를 찾기 위해서 염기 서열에서 빈번하게 나오는 패턴 or 텍스트를 찾는다
+
+1. We get a string (that is an ori candidate)
+
+2. We get the the length of possible k-mers we want to look for
+
+3. We isolate every k-consecutive set of letters in the string. For example (in the string 'AATGAA', all possible 2-mers are every 2-consecutive set of letters in it: AA, AT, TG, GA, AA)
+
+4. We check each of these k-consecutive sets for frequency by calling the PatternCount function
+
+5. We output the k-consecutive set(s) that is most frequent
+
+The 3-mers appearing 25 times is not too surprising. Smaller the mer, greater the chances of it occurring.
+
+The 6-mer appearing 8 times is def surprising tho. It's a fairly large mer but still appears 8 times.
+
+STOP and Think: Look again at the four most frequent 9-mers in the ori region of Vibrio cholerae. Now do you notice anything surprising?
+
+"ATGATCAAG",   "CTTGATCAT",   "TCTTGATCA",   "CTCTTGATC"
+
+With the exception of the three occurrences of "ATGATCAAG" in ori at starting positions 151913, 152013, and 152394, no other instances of "ATGATCAAG" form “clumps”, i.e., appear close to each other in a small region of the genome.
